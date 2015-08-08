@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SVG Gradient Cleaner</title>
+  <style>
+  textarea, button {
+    width: 90%;
+    max-width: 700px;
+    margin: 1em auto;
+    display: block;
+    box-sizing: border-box;
+  }
+  textarea {
+    height: 300px;
+    padding: 1em;
+    white-space: pre;
+    font-family: monospace;
+  }
+
+  button {
+    padding: 1em 2em;
+  }
+
+  #content {
+    display: none;
+  }
+  </style>
+</head>
+<body>
+
+  <textarea id=source placeholder="Crummy AI SVG here"></textarea>
+  <button onclick="convert()">Gradients to defs sans redundancies, plz!</button>
+  <textarea id=output placeholder="Output will be here..."></textarea>
+
+  <script>
+  function convert() {
+    // source content
+    var source = document.getElementById("source").value;
+    // all gradients expression
+    var gradientExp = /(<[a-zA-Z]+Gradient[\S\s]+?<\/[a-zA-Z]+Gradient>)/g;
+    // finding all gradients
+    var gradientMatches = source.match(gradientExp);
+    // gradients array to hold gradient objects for comparison
+    var gradients = [];
+    // if any gradients exist
+    if(gradientMatches) {
+      // for each match
+      for (var m = 0; m < gradientMatches.length;) {
+
+        var gradient = gradientMatches[m++],
+            tag = gradient.match(/<[a-zA-Z]+Gradient[\S\s]+?>/)[0],
+            type = tag.match(/[a-z]+Gradient/)[0],
+            id = tag.match(/id=".*?"/)[0].replace(/id="(.*)?"/, "$1"),
+            attrs = tag.match(/[a-zA-Z0-9-_]+=".+?"/g),
+            stops = "  " + gradient.match(/<stop.*(\/>|<\/stop>)/g).join("\n  ");
+
+        // if we're past the first match
+        if (m > 1) {
+          // checking flag
+          var checking = true;
+          // see if stops match a previous stops
+          for (var s = m - 1; s > 0; s--) {
+            // if stops match previous stops
+            if (stops == gradients[s - 1].stops && checking) {
+              checking = false;
+              // remove stops value
+              stops = "";// "#" + gradients[s - 1].id;
+              // add xlink attribute
+              attrs.splice(1, 0, "xlink:href=\"#" + gradients[s - 1].id + "\"");
+            };
+          }
+        }
+
+        // add gradient to gradients
+        gradients.push({
+          type: type,
+          id: id,
+          attrs: attrs,
+          stops: stops
+        });
+
+        // remove all gradients
+        source = source.replace(gradient, "");
+      }
+
+      console.log(gradients);
+
+      // defs
+      var defs = "";
+      // for each gradient
+      for(var g = 0; g < gradients.length; g++) {
+        var gradient = gradients[g];
+        defs += "\n<" + gradient.type + " " + gradient.attrs.join(" ");
+        if (gradient.stops) {
+          defs += ">\n" + gradient.stops + "\n</" + gradient.type + ">";
+        } else {
+          defs += " />";
+        }
+        defs += "\n";
+      }
+
+      if(source.indexOf("<defs>") > -1) {
+        source = source.replace("<defs>", "<defs>\n"+defs);
+      } else {
+        source = source.replace(/(<svg.*?>)/g, "$1\n<defs>\n"+defs+"</defs>\n");
+      }
+
+    }
+    document.getElementById("output").value = source;
+  }
+
+
+  </script>
+
+</body>
+</html>
