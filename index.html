@@ -2,113 +2,75 @@
 <html>
 <head>
   <title>SVG Gradient Cleaner</title>
-  <style>
-  textarea, button {
-    width: 90%;
-    max-width: 700px;
-    margin: 1em auto;
-    display: block;
-    box-sizing: border-box;
-  }
-  textarea {
-    height: 300px;
-    padding: 1em;
-    white-space: pre;
-    font-family: monospace;
-  }
-
-  button {
-    padding: 1em 2em;
-  }
-
-  #content {
-    display: none;
-  }
-  </style>
+  <link rel=stylesheet href="style.css">
 </head>
 <body>
 
-  <textarea id=source placeholder="Crummy AI SVG here"></textarea>
-  <button onclick="convert()">Gradients to defs sans redundancies, plz!</button>
-  <textarea id=output placeholder="Output will be here..."></textarea>
+  <section>
+
+    <textarea id="input" placeholder="Crummy AI SVG here"></textarea>
+
+    <textarea id="output" placeholder="Output will be here..."></textarea>
+
+  </section>
+
+
+  <button id="trigger">Gradients to defs sans redundancies, plz!</button>
+
+<!--
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="600" viewBox="0 0 800 600">
+  <defs></defs>
+  <g>
+    <linearGradient id="e" gradientUnits="userSpaceOnUse" x1="105.933" y1="168.139" x2="105.933" y2="364.116">
+      <stop offset=".004" stop-color="#C49E89"/>
+      <stop offset=".256" stop-color="#A77F56"/>
+      <stop offset=".281" stop-color="#9F7952"/>
+      <stop offset=".382" stop-color="#856445"/>
+      <stop offset=".493" stop-color="#70533B"/>
+      <stop offset=".618" stop-color="#614834"/>
+      <stop offset=".766" stop-color="#594130"/>
+      <stop offset="1" stop-color="#563F2F"/>
+    </linearGradient>
+    <path fill="url(#e)" d="M99.9 168.1l-5.2 193.7s11.5 5.7 22.5-.7l-4.2-193H99.9z"/>
+  </g>
+  <g>
+    <linearGradient id="f" gradientUnits="userSpaceOnUse" x1="677.744" y1="174.154" x2="677.744" y2="370.131">
+      <stop offset=".004" stop-color="#C49E89"/>
+      <stop offset=".256" stop-color="#A77F56"/>
+      <stop offset=".281" stop-color="#9F7952"/>
+      <stop offset=".382" stop-color="#856445"/>
+      <stop offset=".493" stop-color="#70533B"/>
+      <stop offset=".618" stop-color="#614834"/>
+      <stop offset=".766" stop-color="#594130"/>
+      <stop offset="1" stop-color="#563F2F"/>
+    </linearGradient>
+    <path fill="url(#f)" d="M671.7 174.2l-5.2 193.7s11.5 5.7 22.5-.7l-4.1-192.9h-13.2z"/>
+  </g>
+  <g>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="742.187" y1="127.981" x2="742.187" y2="373.223">
+      <stop offset=".004" stop-color="#C49E89"/>
+      <stop offset=".256" stop-color="#A77F56"/>
+      <stop offset=".281" stop-color="#9F7952"/>
+      <stop offset=".382" stop-color="#856445"/>
+      <stop offset=".493" stop-color="#70533B"/>
+      <stop offset=".618" stop-color="#614834"/>
+      <stop offset=".766" stop-color="#594130"/>
+      <stop offset="1" stop-color="#563F2F"/>
+    </linearGradient>
+    <path fill="url(#g)" d="M734.6 128l-6.5 242.4s14.3 7.1 28.1-.9L751.1 128h-16.5z"/>
+  </g>
+</svg>
+-->
+
+  <script src="svg-gradient-cleaner.js"></script>
 
   <script>
-  function convert() {
-    // source content
-    var source = document.getElementById("source").value;
-    // all gradients expression
-    var gradientExp = /(<[a-zA-Z]+Gradient[\S\s]+?<\/[a-zA-Z]+Gradient>)/g;
-    // finding all gradients
-    var gradientMatches = source.match(gradientExp);
-    // gradients array to hold gradient objects for comparison
-    var gradients = [];
-    // if any gradients exist
-    if(gradientMatches) {
-      // for each match
-      for (var m = 0; m < gradientMatches.length;) {
 
-        var gradient = gradientMatches[m++],
-            tag = gradient.match(/<[a-zA-Z]+Gradient[\S\s]+?>/)[0],
-            type = tag.match(/[a-z]+Gradient/)[0],
-            id = tag.match(/id=".*?"/)[0].replace(/id="(.*)?"/, "$1"),
-            attrs = tag.match(/[a-zA-Z0-9-_]+=".+?"/g),
-            stops = "  " + gradient.match(/<stop.*(\/>|<\/stop>)/g).join("\n  ");
-
-        // if we're past the first match
-        if (m > 1) {
-          // checking flag
-          var checking = true;
-          // see if stops match a previous stops
-          for (var s = m - 1; s > 0; s--) {
-            // if stops match previous stops
-            if (stops == gradients[s - 1].stops && checking) {
-              checking = false;
-              // remove stops value
-              stops = "";// "#" + gradients[s - 1].id;
-              // add xlink attribute
-              attrs.splice(1, 0, "xlink:href=\"#" + gradients[s - 1].id + "\"");
-            };
-          }
-        }
-
-        // add gradient to gradients
-        gradients.push({
-          type: type,
-          id: id,
-          attrs: attrs,
-          stops: stops
-        });
-
-        // remove all gradients
-        source = source.replace(gradient, "");
-      }
-
-      console.log(gradients);
-
-      // defs
-      var defs = "";
-      // for each gradient
-      for(var g = 0; g < gradients.length; g++) {
-        var gradient = gradients[g];
-        defs += "\n<" + gradient.type + " " + gradient.attrs.join(" ");
-        if (gradient.stops) {
-          defs += ">\n" + gradient.stops + "\n</" + gradient.type + ">";
-        } else {
-          defs += " />";
-        }
-        defs += "\n";
-      }
-
-      if(source.indexOf("<defs>") > -1) {
-        source = source.replace("<defs>", "<defs>\n"+defs);
-      } else {
-        source = source.replace(/(<svg.*?>)/g, "$1\n<defs>\n"+defs+"</defs>\n");
-      }
-
-    }
-    document.getElementById("output").value = source;
-  }
-
+    var c = new Cleaner({
+      'input_id': 'input',
+      'output_id': 'output',
+      'trigger_id': 'trigger'
+    });
 
   </script>
 

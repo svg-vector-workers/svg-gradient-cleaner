@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #444;
+}
+
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+section, button {
+  width: 90%;
+  max-width: 900px;
+  margin: 1em auto;
+  display: block;
+}
+textarea {
+  width: calc(50%);
+  float: left;
+  height: 300px;
+  padding: 1em;
+  white-space: pre;
+  font-family: monospace;
+}
+
+button {
+  padding: 1em 2em;
+}
