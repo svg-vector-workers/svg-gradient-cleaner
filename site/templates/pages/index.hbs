@@ -5,53 +5,61 @@ layout: default
 description:
 ---
 
-<section>
+<div class="svgc-section">
+  <section class="code-windows">
     <pre><code class="language-html"><textarea id="input" placeholder="Input"></textarea></code></pre>
     <pre><code class="language-html"><textarea id="output" placeholder="Output"></textarea></code></pre>
-</section>
 
-<button id="trigger">Cleanse Gradients</button>
+    <div class="sidebar">
+      {{> logo}}
+      <button id="trigger">Organize Gradients Into &lt;defs&gt;</button>
+    </div>
+  </section>
 
-<h3>Copy & Paste Sample</h3>
-<pre class="language-html" id="sample"><code>&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; width=&quot;800&quot; height=&quot;600&quot; viewBox=&quot;0 0 800 600&quot;&gt;
-  &lt;defs&gt;&lt;/defs&gt;
-  &lt;g&gt;
-    &lt;linearGradient id=&quot;e&quot; gradientUnits=&quot;userSpaceOnUse&quot; x1=&quot;105.933&quot; y1=&quot;168.139&quot; x2=&quot;105.933&quot; y2=&quot;364.116&quot;&gt;
-      &lt;stop offset=&quot;.004&quot; stop-color=&quot;#C49E89&quot;/&gt;
-      &lt;stop offset=&quot;.256&quot; stop-color=&quot;#A77F56&quot;/&gt;
-      &lt;stop offset=&quot;.281&quot; stop-color=&quot;#9F7952&quot;/&gt;
-      &lt;stop offset=&quot;.382&quot; stop-color=&quot;#856445&quot;/&gt;
-      &lt;stop offset=&quot;.493&quot; stop-color=&quot;#70533B&quot;/&gt;
-      &lt;stop offset=&quot;.618&quot; stop-color=&quot;#614834&quot;/&gt;
-      &lt;stop offset=&quot;.766&quot; stop-color=&quot;#594130&quot;/&gt;
-      &lt;stop offset=&quot;1&quot; stop-color=&quot;#563F2F&quot;/&gt;
-    &lt;/linearGradient&gt;
-    &lt;path fill=&quot;url(#e)&quot; d=&quot;M99.9 168.1l-5.2 193.7s11.5 5.7 22.5-.7l-4.2-193H99.9z&quot;/&gt;
-  &lt;/g&gt;
-  &lt;g&gt;
-    &lt;linearGradient id=&quot;f&quot; gradientUnits=&quot;userSpaceOnUse&quot; x1=&quot;677.744&quot; y1=&quot;174.154&quot; x2=&quot;677.744&quot; y2=&quot;370.131&quot;&gt;
-      &lt;stop offset=&quot;.004&quot; stop-color=&quot;#C49E89&quot;/&gt;
-      &lt;stop offset=&quot;.256&quot; stop-color=&quot;#A77F56&quot;/&gt;
-      &lt;stop offset=&quot;.281&quot; stop-color=&quot;#9F7952&quot;/&gt;
-      &lt;stop offset=&quot;.382&quot; stop-color=&quot;#856445&quot;/&gt;
-      &lt;stop offset=&quot;.493&quot; stop-color=&quot;#70533B&quot;/&gt;
-      &lt;stop offset=&quot;.618&quot; stop-color=&quot;#614834&quot;/&gt;
-      &lt;stop offset=&quot;.766&quot; stop-color=&quot;#594130&quot;/&gt;
-      &lt;stop offset=&quot;1&quot; stop-color=&quot;#563F2F&quot;/&gt;
-    &lt;/linearGradient&gt;
-    &lt;path fill=&quot;url(#f)&quot; d=&quot;M671.7 174.2l-5.2 193.7s11.5 5.7 22.5-.7l-4.1-192.9h-13.2z&quot;/&gt;
-  &lt;/g&gt;
-  &lt;g&gt;
-    &lt;linearGradient id=&quot;g&quot; gradientUnits=&quot;userSpaceOnUse&quot; x1=&quot;742.187&quot; y1=&quot;127.981&quot; x2=&quot;742.187&quot; y2=&quot;373.223&quot;&gt;
-      &lt;stop offset=&quot;.004&quot; stop-color=&quot;#C49E89&quot;/&gt;
-      &lt;stop offset=&quot;.256&quot; stop-color=&quot;#A77F56&quot;/&gt;
-      &lt;stop offset=&quot;.281&quot; stop-color=&quot;#9F7952&quot;/&gt;
-      &lt;stop offset=&quot;.382&quot; stop-color=&quot;#856445&quot;/&gt;
-      &lt;stop offset=&quot;.493&quot; stop-color=&quot;#70533B&quot;/&gt;
-      &lt;stop offset=&quot;.618&quot; stop-color=&quot;#614834&quot;/&gt;
-      &lt;stop offset=&quot;.766&quot; stop-color=&quot;#594130&quot;/&gt;
-      &lt;stop offset=&quot;1&quot; stop-color=&quot;#563F2F&quot;/&gt;
-    &lt;/linearGradient&gt;
-    &lt;path fill=&quot;url(#g)&quot; d=&quot;M734.6 128l-6.5 242.4s14.3 7.1 28.1-.9L751.1 128h-16.5z&quot;/&gt;
-  &lt;/g&gt;
-&lt;/svg&gt;</code></pre>
+  <div class="code-sample">
+    <h3>Copy & Paste Sample</h3>
+      <pre class="language-html" id="sample"><code>&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; width=&quot;800&quot; height=&quot;600&quot; viewBox=&quot;0 0 800 600&quot;&gt;
+        &lt;defs&gt;&lt;/defs&gt;
+        &lt;g&gt;
+          &lt;linearGradient id=&quot;e&quot; gradientUnits=&quot;userSpaceOnUse&quot; x1=&quot;105.933&quot; y1=&quot;168.139&quot; x2=&quot;105.933&quot; y2=&quot;364.116&quot;&gt;
+            &lt;stop offset=&quot;.004&quot; stop-color=&quot;#C49E89&quot;/&gt;
+            &lt;stop offset=&quot;.256&quot; stop-color=&quot;#A77F56&quot;/&gt;
+            &lt;stop offset=&quot;.281&quot; stop-color=&quot;#9F7952&quot;/&gt;
+            &lt;stop offset=&quot;.382&quot; stop-color=&quot;#856445&quot;/&gt;
+            &lt;stop offset=&quot;.493&quot; stop-color=&quot;#70533B&quot;/&gt;
+            &lt;stop offset=&quot;.618&quot; stop-color=&quot;#614834&quot;/&gt;
+            &lt;stop offset=&quot;.766&quot; stop-color=&quot;#594130&quot;/&gt;
+            &lt;stop offset=&quot;1&quot; stop-color=&quot;#563F2F&quot;/&gt;
+          &lt;/linearGradient&gt;
+          &lt;path fill=&quot;url(#e)&quot; d=&quot;M99.9 168.1l-5.2 193.7s11.5 5.7 22.5-.7l-4.2-193H99.9z&quot;/&gt;
+        &lt;/g&gt;
+        &lt;g&gt;
+          &lt;linearGradient id=&quot;f&quot; gradientUnits=&quot;userSpaceOnUse&quot; x1=&quot;677.744&quot; y1=&quot;174.154&quot; x2=&quot;677.744&quot; y2=&quot;370.131&quot;&gt;
+            &lt;stop offset=&quot;.004&quot; stop-color=&quot;#C49E89&quot;/&gt;
+            &lt;stop offset=&quot;.256&quot; stop-color=&quot;#A77F56&quot;/&gt;
+            &lt;stop offset=&quot;.281&quot; stop-color=&quot;#9F7952&quot;/&gt;
+            &lt;stop offset=&quot;.382&quot; stop-color=&quot;#856445&quot;/&gt;
+            &lt;stop offset=&quot;.493&quot; stop-color=&quot;#70533B&quot;/&gt;
+            &lt;stop offset=&quot;.618&quot; stop-color=&quot;#614834&quot;/&gt;
+            &lt;stop offset=&quot;.766&quot; stop-color=&quot;#594130&quot;/&gt;
+            &lt;stop offset=&quot;1&quot; stop-color=&quot;#563F2F&quot;/&gt;
+          &lt;/linearGradient&gt;
+          &lt;path fill=&quot;url(#f)&quot; d=&quot;M671.7 174.2l-5.2 193.7s11.5 5.7 22.5-.7l-4.1-192.9h-13.2z&quot;/&gt;
+        &lt;/g&gt;
+        &lt;g&gt;
+          &lt;linearGradient id=&quot;g&quot; gradientUnits=&quot;userSpaceOnUse&quot; x1=&quot;742.187&quot; y1=&quot;127.981&quot; x2=&quot;742.187&quot; y2=&quot;373.223&quot;&gt;
+            &lt;stop offset=&quot;.004&quot; stop-color=&quot;#C49E89&quot;/&gt;
+            &lt;stop offset=&quot;.256&quot; stop-color=&quot;#A77F56&quot;/&gt;
+            &lt;stop offset=&quot;.281&quot; stop-color=&quot;#9F7952&quot;/&gt;
+            &lt;stop offset=&quot;.382&quot; stop-color=&quot;#856445&quot;/&gt;
+            &lt;stop offset=&quot;.493&quot; stop-color=&quot;#70533B&quot;/&gt;
+            &lt;stop offset=&quot;.618&quot; stop-color=&quot;#614834&quot;/&gt;
+            &lt;stop offset=&quot;.766&quot; stop-color=&quot;#594130&quot;/&gt;
+            &lt;stop offset=&quot;1&quot; stop-color=&quot;#563F2F&quot;/&gt;
+          &lt;/linearGradient&gt;
+          &lt;path fill=&quot;url(#g)&quot; d=&quot;M734.6 128l-6.5 242.4s14.3 7.1 28.1-.9L751.1 128h-16.5z&quot;/&gt;
+        &lt;/g&gt;
+      &lt;/svg&gt;</code></pre>
+  </div>
+
+</div>
