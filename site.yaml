@@ -1,0 +1,28 @@
+---
+
+# =============================================
+# CONFIG
+# =============================================
+
+# site
+root:
+dest:             <%= site.root %>
+data:             data
+
+# assemble
+templates:         site/templates
+layouts:           <%= site.templates %>/layouts
+layout:            default
+pages:             <%= site.templates %>/pages
+includes:          <%= site.templates %>/{includes, pages}
+imgdir:            <%= site.root %>/img/site
+
+
+# =============================================
+# META
+# =============================================
+
+# site
+title:              SVGradientCleaner
+author:             <%= pkg.author %>
+url:                <%= pkg.homepage %>

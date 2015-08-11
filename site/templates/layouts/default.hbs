@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}">
+
+    {{#if production}}
+    <meta name="robots" content="all">
+    {{else}}
+    <meta name="robots" content="none">
+    {{/if}}
+
+    <meta name="author" content="{{site.author}}">
+    <meta name="Copyright" content="{{site.author}} ©2015. All Rights Reserved.">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <meta property="og:title" content="{{site.title}}">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="{{site.url}}">
+    <meta property="og:image" content="{{site.url}}/ograph.png">
+    <meta property="og:description" content="{{site.description}}">
+    <meta property="fb:admins" content="1">
+
+    <!--<link rel="author" href="humans.txt">-->
+
+    <!-- build:css {{site.root}}/css/style.min.css -->
+    <link rel="stylesheet" href="{{site.root}}/css/site.css">
+    <!-- endbuild -->
+  </head>
+  <body>
+
+    <header role="banner">
+      <h1>SVGradientCleaner</h1>
+    </header>
+
+    <main role="main">
+    {% body %}
+    </main>
+
+    <script src="{{site.root}}/js/src/svg-gradient-cleaner.js"></script>
+    <script>
+    var c = new Cleaner({
+      'input_id': 'input',
+      'output_id': 'output',
+      'trigger_id': 'trigger'
+    });
+    </script>
+
+    <script src="{{site.root}}/js/src/prism.js"></script>
+  </body>
+</html>
