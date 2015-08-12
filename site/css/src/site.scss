@@ -48,7 +48,7 @@ body {
   font-size: font(sm);
 
   &:nth-child(even) {
-    border-left: ui(border) solid color(alt);
+    border-left: ui(border) solid color(white-trans);
   }
 }
 
