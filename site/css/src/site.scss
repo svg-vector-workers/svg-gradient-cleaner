@@ -87,7 +87,7 @@ header[role="banner"] h1 {
   text-transform: Capitalize;
 }
 
-textarea {
+.CodeMirror {
   border: 1px solid rgba(19, 17, 17, 0.13);
   height: 100vh;
   resize: none;
@@ -101,7 +101,7 @@ textarea {
 .code-windows {
   display: flex;
   flex-wrap: wrap;
-  > pre {
+  > .CodeMirror {
     flex: 2;
     margin: 0;
   }
