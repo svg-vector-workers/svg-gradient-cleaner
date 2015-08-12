@@ -145,53 +145,6 @@ gulp.task('sass', function() {
 // Templatin'
 // ===================================================
 
-assemble.set('categories', {});
-
-assemble.onLoad(/\.hbs/, function(file, next) {
-
-  if (!file.data || !file.data.categories) {
-    return next();
-  }
-
-  var renameKey = assemble.option('renameKey');
-  var categories = assemble.get('categories');
-  var cats = file.data.categories;
-
-  cats = Array.isArray(cats) ? cats : [cats];
-
-  cats.forEach(function(cat) {
-    categories[cat] = categories[cat] || [];
-    categories[cat][renameKey(file.path)] = file;
-  });
-
-  next();
-});
-
-
-/**
- * Handlebars helper to iterate over an object of pages for a specific category
- *
- * ```
- * {{#category "category-name"}}
- *   <li>{{data.summary}}</li>
- * {{/category}}
- * ```
- */
-
-assemble.helper('category', function(category, options) {
-  var pages = this.app.get('categories.' + category);
-  if (!pages) {
-    return '';
-  }
-  return Object.keys(pages).map(function(page) {
-    // this renders the block between `{{#category}}` and `{{category}}` passing the
-    // entire page object as the context.
-    // If you only want to use the page's front-matter, then change this to something like
-    // return options.fn(pages[page].data);
-    return options.fn(pages[page]).toLowerCase();
-  }).join('\n');
-});
-
 /**
  * Load data onto assemble cache.
  * This loads data from `glob.data` and `glob.rootData`.
