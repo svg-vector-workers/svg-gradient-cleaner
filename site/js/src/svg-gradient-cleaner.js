@@ -14,6 +14,8 @@ function Cleaner(params) {
     }, {
       value: $ip.value,
       mode: 'xml',
+      htmlMode: true,
+      theme: 'base16-dark',
       lineNumbers: true
     });
 
@@ -25,6 +27,8 @@ function Cleaner(params) {
     }, {
       value: $op.value,
       mode: 'xml',
+      htmlMode: true,
+      theme: 'base16-dark',
       lineNumbers: true
     });
 

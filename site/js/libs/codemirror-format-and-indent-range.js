@@ -59,24 +59,10 @@
   // Applies automatic mode-aware indentation to the specified range
   CodeMirror.defineExtension("autoIndentRange", function (from, to) {
     var cm = this;
-    var tab = 2,
-        running = 0;
 
     this.operation(function () {
       for (var i = from.line; i <= to.line; i++) {
-        // get line tokens
-        var t = cm.getLineTokens(i)[0];
-        // if theres shit on the line
-        if(t && t.string) {
-          var closing_tag = t.string.match(/<\//),
-              self_closing_tag = t.string.match(/\/>/);
-          // if is a closing tag
-          if(closing_tag) { running--; };
-          cm.indentLine(i, tab * running);
-          running++;
-          if(closing_tag || self_closing_tag) { running--; };
-        }
-
+        cm.indentLine(i, "smart");
       }
     });
   });
