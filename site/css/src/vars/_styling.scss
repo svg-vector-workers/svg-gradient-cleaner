@@ -16,6 +16,8 @@ $colors: (
   } @else {
     @if $mod == dark  {
       @return darken($color,$val);
+    } @if $mod == trans  {
+      @return transparentize($color,$val);
     } @else {
       @return $color;
     }

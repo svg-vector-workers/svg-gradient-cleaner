@@ -88,7 +88,7 @@ body {
 // ===============================================
 
 header {
-  border-bottom: ui(border) solid color(alt);
+  border-bottom: ui(border) solid color(alt,trans,0.5);
   display: flex;
   justify-content: space-between;
   height: size(header-h) - spacing(header-pad)*2;

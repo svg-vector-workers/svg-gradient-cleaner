@@ -1,7 +1,7 @@
 button {
   border: none;
   border-radius: ui(corner);
-  box-shadow: 0px ui(border) 0px 0px darken(color(accent),20%);
+  box-shadow: 0px ui(border) 0px 0px color(accent, dark, 20%);
 
   outline: none;
   padding-left: 2em;
@@ -14,18 +14,18 @@ button {
   font-size: 14px;
   font-weight: 300;
   line-height: 1;
-  text-shadow: 1px 1px 0px darken(color(accent),10%);
+  text-shadow: 1px 1px 0px color(accent,dark,10%);
 
   background: color(accent);
   color: white;
 
   &:hover,
   &:focus {
-    background: darken(color(accent),10%)
+    background: color(accent,dark,10%)
   }
 
   &:active {
-    box-shadow: 0px 0px 0px 0px darken(color(accent),20%);
+    box-shadow: 0px 0px 0px 0px color(accent,dark,20%);
     transform: translateY(ui(border));
   }
 }
