@@ -29,11 +29,10 @@
     <meta property="og:description" content="{{site.description}}">
     <meta property="fb:admins" content="1">
 
-    <!--<link rel="author" href="humans.txt">-->
-
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800,300italic" rel="stylesheet">
+
     <!-- build:css {{site.root}}/css/style.min.css -->
-    <link rel="stylesheet" href="{{site.root}}/css/libs/libs.min.css">
+    <link rel="stylesheet" href="{{site.root}}/bower_components/codemirror/lib/codemirror.css">
     <link rel="stylesheet" href="{{site.root}}/css/site.css">
     <!-- endbuild -->
   </head>
@@ -42,8 +41,11 @@
       {% body %}
     </main>
 
-    <script src="{{site.root}}/js/libs/libs.min.js"></script>
+    <!-- build:js js/src/scripts.min.js -->
+    <script src="{{site.root}}/bower_components/codemirror/lib/codemirror.js"></script>
     <script src="{{site.root}}/js/src/svg-gradient-cleaner.js"></script>
+    <!-- endbuild -->
+
     <script>
       var c = new Cleaner({
         'input_id': 'input',
@@ -51,28 +53,5 @@
         'trigger_id': 'trigger'
       });
     </script>
-
-    {{!-- is it worth gsap right now? not sure yet --}}
-    <script>
-      // // Establish a timeline
-      // var tl = new TimelineMax({
-      //   repeat: -1
-      // });
-
-      // // Get the linearGradient ID & gradientTransform attribute
-      // var gradient      = document.getElementById('gradient'),
-      //     gradient_attr = gradient.getAttribute('gradientTransform');
-
-      // // The loop to iterate over values of 0-360
-      // for(var i = 0, l = 360; i <= l; i++) {
-      //   tl.to(gradient, 0.01, {
-      //     attr: {
-      //       gradientTransform: 'rotate(' + -i + ')'
-      //     },
-      //     ease: Cubic.easeInOut
-      //   })
-      // }
-    </script>
-
   </body>
 </html>
