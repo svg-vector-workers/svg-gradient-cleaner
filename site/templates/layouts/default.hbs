@@ -22,26 +22,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="msapplication-tap-highlight" content="no">
 
-    <meta property="og:title" content="{{site.title}}">
-    <meta property="og:type" content="profile">
-    <meta property="og:url" content="{{site.url}}">
-    <meta property="og:image" content="{{site.url}}/ograph.png">
-    <meta property="og:description" content="{{site.description}}">
-    <meta property="fb:admins" content="1">
-
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic|Inconsolata:400" rel="stylesheet">
 
     <!-- build:css {{site.root}}/css/style.min.css -->
     <link rel="stylesheet" href="{{site.root}}/bower_components/codemirror/lib/codemirror.css">
-    <link rel="stylesheet" href="{{site.root}}/css/libs/codemirror-base16-dark.css">
+    <link rel="stylesheet" href="{{site.root}}/bower_components/codemirror/theme/base16-dark.css">
     <link rel="stylesheet" href="{{site.root}}/css/site.css">
     <!-- endbuild -->
   </head>
   <body>
+    {{> header}}
 
     <main role="main">
       {% body %}
     </main>
+
+    {{> footer}}
 
     <!-- build:js js/src/scripts.min.js -->
     <script src="{{site.root}}/bower_components/codemirror/lib/codemirror.js"></script>
