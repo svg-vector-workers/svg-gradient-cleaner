@@ -3,4 +3,8 @@
   font-weight: 300;
   font-size: font(lg);
   &[class*="-large"] { font-size: 2em; }
+  small:before {
+    content: "/// ";
+
+  }
 }
