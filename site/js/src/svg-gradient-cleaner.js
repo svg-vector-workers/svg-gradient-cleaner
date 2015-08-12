@@ -60,12 +60,22 @@ function Cleaner(params) {
     var input_value = cleaner.$input.getValue();
 
     //
-    cleaner.gradients = {}
+    cleaner.gradients = {
+      // finding all gradients
+      found: input_value.match(cleaner.lib.__gradients),
+      // will hold clean gradients
+      clean: new Array()
+    }
+
+    // process found gradients
+    return cleaner.processFoundGradients(input_value);
+
+  }
 
 
-    // finding all gradients
-    cleaner.gradients.found = input_value.match(cleaner.lib.__gradients);
-    cleaner.gradients.clean = [];
+  //
+  // //
+  cleaner.processFoundGradients = function(input_value) {
 
     // if any gradients exist
     if(cleaner.gradients.found) {
@@ -141,14 +151,14 @@ function Cleaner(params) {
       }
 
       // response is success with formatted gradients
-      res = {
-        message: "success",
-        value: input_value
-      }
+      return { message: "success", value: input_value }
+
+    } else {
+
+      // response is error
+      return { message: "error", value: "No gradients found." };
 
     }
-
-    return res || { message: "error", value: "No gradients found." };
   }
 
 
