@@ -1,12 +1,35 @@
+
 function Cleaner(params) {
   var cleaner = {};
 
 
   // set up DOM and bind events to DOM
   cleaner.setup = function() {
-    // store elements in cleaner object
-    cleaner.$input = document.getElementById(params.input_id);
-    cleaner.$output = document.getElementById(params.output_id);
+
+    //
+    // input cleaner object
+    var $ip = document.getElementById(params.input_id);
+    cleaner.$input = CodeMirror(function(elt) {
+      $ip.parentNode.replaceChild(elt, $ip);
+    }, {
+      value: $ip.value,
+      mode: 'xml',
+      lineNumbers: true
+    });
+
+    //
+    // output cleaner object
+    var $op = document.getElementById(params.output_id);
+    cleaner.$output = CodeMirror(function(elt) {
+      $op.parentNode.replaceChild(elt, $op);
+    }, {
+      value: $op.value,
+      mode: 'xml',
+      lineNumbers: true
+    });
+
+    //
+    // triggering
     cleaner.$trigger = document.getElementById(params.trigger_id);
 
     // bind main cleaner method to trigger click
@@ -18,8 +41,9 @@ function Cleaner(params) {
   // get cleaned code and output it
   cleaner.cleanHandler = function() {
     var cleaned_code = cleaner.cleanSVG();
-    cleaner.$output.value = cleaned_code.value;
-    console.log(cleaned_code, cleaner.gradients);
+    cleaner.$output.setValue(cleaned_code.value);
+    cleaner.format(cleaner.$output);
+    // console.log(cleaned_code, cleaner.gradients);
   }
 
 
@@ -30,7 +54,7 @@ function Cleaner(params) {
     var res;
 
     //
-    var input_value = cleaner.$input.value;
+    var input_value = cleaner.$input.getValue();
 
     //
     cleaner.gradients = {}
@@ -121,6 +145,22 @@ function Cleaner(params) {
     }
 
     return res || { message: "error", value: "No gradients found." };
+  }
+
+
+  //
+  // format a codemirror editor
+  cleaner.format = function($editor) {
+    // remove all the shitty whitespace
+    $editor.autoFormatRange(
+      { line: 0, ch: 0 },
+      { line: $editor.lineCount() }
+    );
+    // format indentation
+    $editor.autoIndentRange(
+      { line: 0, ch: 0 },
+      { line: $editor.lineCount() }
+    );
   }
 
 
