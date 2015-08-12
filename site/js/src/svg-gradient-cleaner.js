@@ -109,12 +109,13 @@ function Cleaner(params) {
           type: type, id: id, attrs: attrs, stops: stops, stops_str: stops_str
         });
 
+
         //
         // remove gradient from original location
         input_value = input_value.replace(gradient, "");
       }
 
-      // console.log(gradients);
+      console.log(cleaner.gradients.clean);
 
       //
       // writing defs
@@ -175,7 +176,7 @@ function Cleaner(params) {
     __gradientType: /[a-z]+Gradient/,
     __id: /id=".*?"/,
     __id_val: /id="(.*)?"/,
-    __attrs: /[a-zA-Z0-9-_]+=".+?"/g,
+    __attrs: /[a-zA-Z0-9-:_]+=".+?"/g,
     __stops: /<stop.*(\/>|<\/stop>)/g
   }
 
