@@ -1,4 +1,3 @@
-
 function Cleaner(params) {
   var cleaner = {};
 
@@ -84,7 +83,7 @@ function Cleaner(params) {
             id        = tag.match(_lib.__id)[0].replace(_lib.__id_val, "$1"),
             attrs     = tag.match(_lib.__attrs),
             stops     = gradient.match(_lib.__stops),
-            stops_str = "  " + stops.join("\n ");
+            stops_str = (stops) ? "  " + stops.join("\n ") : "";
 
         //
         // if we're past the first match, we need to start looking for duplicate stops and xlink them
@@ -171,7 +170,7 @@ function Cleaner(params) {
   //
   // regular expressions
   cleaner.lib = {
-    __gradients: /(<[a-zA-Z]+Gradient[\S\s]+?<\/[a-zA-Z]+Gradient>)/g,
+    __gradients: /(<[a-zA-Z]+Gradient([^>]|[\s])+?\/>|<[a-zA-Z]+Gradient[\S\s]+?<\/[a-zA-Z]+Gradient>)/g,
     __gradientTag: /<[a-zA-Z]+Gradient[\S\s]+?>/,
     __gradientType: /[a-z]+Gradient/,
     __id: /id=".*?"/,
