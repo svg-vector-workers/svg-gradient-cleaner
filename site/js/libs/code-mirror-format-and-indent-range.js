@@ -75,7 +75,6 @@
           cm.indentLine(i, tab * running);
           running++;
           if(closing_tag || self_closing_tag) { running--; };
-          // cm.indentLine(i, "smart");
         }
 
       }

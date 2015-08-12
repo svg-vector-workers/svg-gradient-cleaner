@@ -10,6 +10,12 @@
 @import "mixins/media-query";
 
 
+// Bower Plugins
+// ===============================================
+
+@import "../../bower_components/normalize-scss/normalize";
+
+
 // Globals
 // ===============================================
 
@@ -18,7 +24,6 @@
 
 input,
 textarea,
-pre,
 button {
   border: none;
   box-sizing: border-box;
@@ -28,7 +33,6 @@ button {
 }
 
 input,
-pre,
 textarea {
   // box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.31), 1px 1px 1px rgba(255, 255, 255, 0.09);
   background: rgba(255, 255, 255, 0.03);
@@ -83,12 +87,6 @@ header[role="banner"] h1 {
   text-transform: Capitalize;
 }
 
-// temporary
-.code-sample {
-  display: none;
-}
-
-.CodeMirror,
 textarea {
   border: 1px solid rgba(19, 17, 17, 0.13);
   height: 100vh;
@@ -103,8 +101,7 @@ textarea {
 .code-windows {
   display: flex;
   flex-wrap: wrap;
-  > .CodeMirror,
-  > textarea {
+  > pre {
     flex: 2;
     margin: 0;
   }
