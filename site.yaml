@@ -23,6 +23,6 @@ imgdir:            <%= site.root %>/img/site
 # =============================================
 
 # site
-title:              SVGradientCleaner
+title:              SVG Clean | Gradients
 author:             <%= pkg.author %>
 url:                <%= pkg.homepage %>
