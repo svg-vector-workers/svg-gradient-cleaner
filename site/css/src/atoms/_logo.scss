@@ -1,0 +1,6 @@
+[class^="logo"] {
+  margin: 0;
+  font-weight: 300;
+  font-size: font(lg);
+  &[class*="-large"] { font-size: 2em; }
+}

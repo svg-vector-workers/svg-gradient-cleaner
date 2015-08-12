@@ -21,42 +21,35 @@
 
 @import "globals/bases";
 
-input,
-textarea,
-button {
-  border: none;
-  box-sizing: border-box;
-  display: block;
-  padding: 10px;
-  width: 100%;
-}
-
-input,
-textarea {
-  // box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.31), 1px 1px 1px rgba(255, 255, 255, 0.09);
-  background: rgba(255, 255, 255, 0.03);
-}
-
-button {
-  box-sizing: border-box;
-  font-size: 14px;
-  font-weight: 300;
-  background: rgba(156, 0, 162, 0.55);
-  color: white;
-}
-
 
 // App Globals
 // ===============================================
 
 html,
 body {
-  height:100%;
+  height: 100%;
 }
 
 body {
-  background-color: #601463;
+  background-color: color(bg);
   font-family: 'Open Sans', sans-serif;
+}
+
+header {
+  background: color(bg);
+  height: size(header-h) - spacing(header-pad)*2;
+  line-height: size(header-h) - spacing(header-pad)*2;
+  padding: spacing(header-pad);
+  border-bottom: ui(border) solid color(alt);
+  display: flex;
+  flex-wrap: wrap;
+  // box-sizing: border-box;
+  > div {
+    flex: 2;
+  }
+  > div:last-child {
+    text-align: right;
+  }
 }
 
 
@@ -66,6 +59,8 @@ body {
 // ===============================================
 
 @import "atoms/typography";
+@import "atoms/logo";
+@import "atoms/buttons";
 
 
 // Molecules
@@ -81,16 +76,16 @@ body {
 // Organisms
 // ===============================================
 
-header[role="banner"] h1 {
-  font-size: 36px;
-  text-transform: Capitalize;
-}
-
 .CodeMirror {
-  border: 1px solid rgba(19, 17, 17, 0.13);
-  height: 100vh;
+  height: calc(100vh - #{size(header-h) + ui(border)});
   resize: none;
-  font-size: small;
+  font-size: font(sm);
+  .CodeMirror-lines {
+    padding: 2em 0;
+  }
+  .CodeMirror-line {
+    line-height: 1.6;
+  }
 }
 
 
@@ -101,17 +96,8 @@ header[role="banner"] h1 {
   display: flex;
   flex-wrap: wrap;
   > .CodeMirror {
+    font-family: Inconsolata;
     flex: 2;
     margin: 0;
   }
-}
-
-
-.sidebar {
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.38);
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #5A175D;
 }
