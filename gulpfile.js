@@ -145,53 +145,25 @@ gulp.task('sass', function() {
 // Templatin'
 // ===================================================
 
-// Pull #3. Also see https://github.com/assemble/assemble/issues/715
-// create a `categories` object to keep categories in (e.g. 'clients')
-// categories: {
-//  clients: {
-//    "polyon": { ... }
-//  }
-// };
 assemble.set('categories', {});
 
-/**
- Populate categories with pages that specify the categories they belong to.
- When the onLoad middleware runs for a single file, it looks at the file's front-matter (file.data) to see if it contains a categories property. This property can be a string or an array of strings. If it exists, then the middleware updates the categories object for each category in the array. In the case of polyon.hbs, there is only 1 category called client, so the categories object becomes:
-
-categories: {
- clients: {
-   "polyon": { ... }
- }
-};
- */
-
 assemble.onLoad(/\.hbs/, function(file, next) {
-  // if the file doesn't have a data object or
-  // doesn't contain `categories` in it's
-  // front-matter, move on.
+
   if (!file.data || !file.data.categories) {
     return next();
   }
 
-  // use the default `renameKey` function to store
-  // pages on the `categories` object
   var renameKey = assemble.option('renameKey');
-
-  // get the categories object
   var categories = assemble.get('categories');
-
-  // figure out which categories this file belongs to
   var cats = file.data.categories;
+
   cats = Array.isArray(cats) ? cats : [cats];
 
-  // add this file's data (file object) to each of
-  // it's catogories
   cats.forEach(function(cat) {
     categories[cat] = categories[cat] || [];
     categories[cat][renameKey(file.path)] = file;
   });
 
-  // done
   next();
 });
 
@@ -200,7 +172,7 @@ assemble.onLoad(/\.hbs/, function(file, next) {
  * Handlebars helper to iterate over an object of pages for a specific category
  *
  * ```
- * {{#category "clients"}}
+ * {{#category "category-name"}}
  *   <li>{{data.summary}}</li>
  * {{/category}}
  * ```
@@ -304,47 +276,12 @@ gulp.task('usemin', ['assemble', 'sass'], function() {
 
 
 // ===================================================
-// Acquirin'
-// ===================================================
-
-// bower javascript files
-gulp.task('bower:js', function() {
-  return gulp.src(bowerFiles())
-    // filter javascript
-    .pipe($.filter('*.js'))
-    // uglify
-    .pipe($.minjs({
-      compress: { negate_iife: false }
-    }))
-    // store in libs file
-    .pipe($.concat('libs/libs.min.js'))
-    .pipe(gulp.dest(path.js));
-});
-
-// bower  css files
-gulp.task('bower:css', function() {
-  return gulp.src(bowerFiles())
-    // filter css
-    .pipe($.filter('*.css'))
-    // minify
-    .pipe($.mincss())
-    // store in libs file
-    .pipe($.concat('libs/libs.min.css'))
-    .pipe(gulp.dest(path.css));
-});
-
-gulp.task('bower', function(){
-  run('bower:css', 'bower:js');
-});
-
-
-// ===================================================
 // Duplicatin'
 // ===================================================
 
 gulp.task('copy', ['usemin'], function() {
   return merge(
-    gulp.src([path.site + '/{img,css/libs,js}/**/*'])
+    gulp.src([path.site + '/{img,bower_components,js/lib}/**/*'])
         .pipe(gulp.dest(path.dist)),
 
     gulp.src([
