@@ -265,7 +265,7 @@ gulp.task('deploy', function() {
 
 gulp.task('clean', function(cb) {
   del([
-    'dist',
+    path.dist,
     glob.css,
     glob.html
   ], cb);
