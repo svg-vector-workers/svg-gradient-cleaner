@@ -34,7 +34,7 @@ $.fs     = require('fs');
 // Configin'
 // ===================================================
 
-var env_flag = false;
+var env_flag = true;
 
 var asset_dir = {
   site: 'site',
@@ -220,7 +220,7 @@ gulp.task('usemin', ['assemble', 'sass'], function() {
         .pipe($.usemin({
           assetsDir: path.site,
           css: [ $.rev() ],
-          html: [ $.minhtml({ empty: false }) ],
+          //html: [ $.minhtml({ empty: false }) ],
           js: [ $.minjs(), $.rev() ]
         }))
         .pipe(gulp.dest(path.dist));
@@ -234,7 +234,7 @@ gulp.task('usemin', ['assemble', 'sass'], function() {
 
 gulp.task('copy', ['usemin'], function() {
   return merge(
-    gulp.src([path.site + '/{img,bower_components,js/lib}/**/*'])
+    gulp.src([path.site + '/{img,js/lib}/**/*'])
         .pipe(gulp.dest(path.dist)),
 
     gulp.src([
