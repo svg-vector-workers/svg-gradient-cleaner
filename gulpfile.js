@@ -220,7 +220,7 @@ gulp.task('usemin', ['assemble', 'sass'], function() {
         .pipe($.usemin({
           assetsDir: path.site,
           css: [ $.rev() ],
-          html: [ $.minhtml({ empty: false }) ],
+          //html: [ $.minhtml({ empty: false }) ],
           js: [ $.minjs(), $.rev() ]
         }))
         .pipe(gulp.dest(path.dist));
@@ -234,7 +234,7 @@ gulp.task('usemin', ['assemble', 'sass'], function() {
 
 gulp.task('copy', ['usemin'], function() {
   return merge(
-    gulp.src([path.site + '/{img,bower_components,js/lib}/**/*'])
+    gulp.src([path.site + '/{img,js/lib}/**/*'])
         .pipe(gulp.dest(path.dist)),
 
     gulp.src([
@@ -265,7 +265,7 @@ gulp.task('deploy', function() {
 
 gulp.task('clean', function(cb) {
   del([
-    'dist',
+    path.dist,
     glob.css,
     glob.html
   ], cb);
