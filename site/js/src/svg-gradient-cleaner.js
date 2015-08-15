@@ -37,6 +37,10 @@ function Cleaner(params) {
 
     // bind main cleaner method to trigger click
     cleaner.$trigger.addEventListener('click', cleaner.cleanHandler);
+
+    //
+    // temporarily converting on load
+    cleaner.cleanHandler();
   }
 
 
@@ -58,6 +62,11 @@ function Cleaner(params) {
 
     //
     var input_value = cleaner.$input.getValue();
+
+    //
+    // turning svg into json object
+    var svgJson = new svgToJson(input_value);
+    console.log(svgJson);
 
     //
     cleaner.gradients = {
@@ -90,10 +99,10 @@ function Cleaner(params) {
         var gradient  = cleaner.gradients.found[match++],
             tag       = gradient.match(_lib.__gradientTag)[0],
             type      = tag.match(_lib.__gradientType)[0],
-            id        = tag.match(_lib.__id)[0].replace(_lib.__id_val, "$1"),
+            id        = tag.match(_lib.__id)[0].replace(_lib.__id_val, '$1'),
             attrs     = tag.match(_lib.__attrs),
             stops     = gradient.match(_lib.__stops),
-            stops_str = (stops) ? "  " + stops.join("\n ") : "";
+            stops_str = (stops) ? '  ' + stops.join('\n ') : '';
 
         //
         // if we're past the first match, we need to start looking for duplicate stops and xlink them
@@ -106,9 +115,9 @@ function Cleaner(params) {
             if (stops_str == cleaner.gradients.clean[s - 1].stops_str && checking) {
               checking = false;
               // remove stops value
-              stops_str = "";
+              stops_str = '';
               // add xlink attribute
-              attrs.splice(1, 0, "xlink:href=\"#" + cleaner.gradients.clean[s - 1].id + "\"");
+              attrs.splice(1, 0, 'xlink:href=\"#' + cleaner.gradients.clean[s - 1].id + '\"');
             };
           }
         }
@@ -128,7 +137,7 @@ function Cleaner(params) {
 
         //
         // remove gradient from original location
-        input_value = input_value.replace(gradient, "");
+        input_value = input_value.replace(gradient, '');
       }
 
       console.log(cleaner.gradients.clean);
@@ -136,34 +145,34 @@ function Cleaner(params) {
 
       //
       // writing defs
-      var defs = "";
+      var defs = '';
       // for each gradient
       for(var g = 0; g < cleaner.gradients.clean.length; g++) {
         var gradient = cleaner.gradients.clean[g];
-        defs += "\n<" + gradient.type + " " + gradient.attrs.join(" ");
+        defs += '\n<' + gradient.type + ' ' + gradient.attrs.join(' ');
         if (gradient.stops_str) {
-          defs += ">\n" + gradient.stops_str + "\n</" + gradient.type + ">";
+          defs += '>\n' + gradient.stops_str + '\n</' + gradient.type + '>';
         } else {
-          defs += " />";
+          defs += ' />';
         }
-        defs += "\n";
+        defs += '\n';
       }
 
       // if defs already exists, we append after opening def tag
-      if(input_value.indexOf("<defs>") > -1) {
-        input_value = input_value.replace("<defs>", "<defs>\n"+defs);
+      if(input_value.indexOf('<defs>') > -1) {
+        input_value = input_value.replace('<defs>', '<defs>\n'+defs);
       // if defs doesn't exist, we wrap gradients with it
       } else {
-        input_value = input_value.replace(/(<svg.*?>)/g, "$1\n<defs>\n"+defs+"</defs>\n");
+        input_value = input_value.replace(/(<svg.*?>)/g, '$1\n<defs>\n'+defs+'</defs>\n');
       }
 
       // response is success with formatted gradients
-      return { message: "success", value: input_value }
+      return { message: 'success', value: input_value }
 
     } else {
 
       // response is error
-      return { message: "error", value: "No gradients found." };
+      return { message: 'error', value: 'No gradients found.' };
 
     }
   }
@@ -175,7 +184,7 @@ function Cleaner(params) {
     var res = [];
     for (var a = 0; a < attrs.length; a++) {
       var attr = attrs[a];
-      attr = (attr.match(" ")) ? attr : attr.replace(/'/g, "").replace(/"/g,"");
+      attr = (attr.match(' ')) ? attr : attr.replace(/'/g, '').replace(/'/g,'');
       res.push(attr);
     }
     console.log(res);
