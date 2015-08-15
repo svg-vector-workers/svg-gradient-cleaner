@@ -113,6 +113,12 @@ function Cleaner(params) {
           }
         }
 
+
+        //
+        // clean attributes
+        attrs = cleaner.cleanAttributes(attrs);
+
+
         //
         // add gradient to gradients
         cleaner.gradients.clean.push({
@@ -126,6 +132,7 @@ function Cleaner(params) {
       }
 
       console.log(cleaner.gradients.clean);
+
 
       //
       // writing defs
@@ -163,6 +170,20 @@ function Cleaner(params) {
 
 
   //
+  // //
+  cleaner.cleanAttributes = function(attrs) {
+    var res = [];
+    for (var a = 0; a < attrs.length; a++) {
+      var attr = attrs[a];
+      attr = (attr.match(" ")) ? attr : attr.replace(/'/g, "").replace(/"/g,"");
+      res.push(attr);
+    }
+    console.log(res);
+    return res;
+  }
+
+
+  //
   // format a codemirror editor
   cleaner.format = function($editor) {
     // remove all the shitty whitespace
@@ -181,12 +202,19 @@ function Cleaner(params) {
   //
   // regular expressions
   cleaner.lib = {
+    // selecting an entire gradient element
     __gradients: /(<[a-zA-Z]+Gradient([^>]|[\s])+?\/>|<[a-zA-Z]+Gradient[\S\s]+?<\/[a-zA-Z]+Gradient>)/g,
+    // grabbing a gradient name
     __gradientTag: /<[a-zA-Z]+Gradient[\S\s]+?>/,
+    // getting the type of gradient
     __gradientType: /[a-z]+Gradient/,
-    __id: /id=".*?"/,
-    __id_val: /id="(.*)?"/,
-    __attrs: /[a-zA-Z0-9-:_]+=".+?"/g,
+    // parsing an id out of a tag
+    __id: /id=["']?([^ "']*)["' ]/,
+    // get id value out of an id
+    __id_val: /id=["']?([^ "']*)["' ]/,
+    // getting each attribute
+    __attrs: /[a-zA-Z0-9-:_]+=["']?(([^"']+["'\/])|([^"' \/>]+))/g,
+    // getting an entire gradient stop
     __stops: /<stop.*(\/>|<\/stop>)/g
   }
 
