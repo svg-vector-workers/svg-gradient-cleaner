@@ -35,7 +35,7 @@ function svgToJson($svg) {
             _name: getTagName(tag),
             _type: getTagType(tag),
             _pos: undefined,
-            attrs: getTagAttributes(tag)
+            _attrs: getTagAttributes(tag)
           };
       arr.push(obj);
     }
@@ -89,7 +89,7 @@ function svgToJson($svg) {
     // for each attribute in tag
     for(var a = 0; a < raw_attrs.length; a++) {
       var attr = raw_attrs[a],
-          key = attr.match(_lib.__attr_key),
+          key = attr.match(_lib.__attr_key)[0],
           key_exp = new RegExp(key,''),
           val = attr.replace(key_exp, '').replace(/[="']/g, ''),
           attr_obj = new Object();

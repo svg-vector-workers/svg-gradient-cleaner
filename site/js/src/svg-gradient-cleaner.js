@@ -1,9 +1,22 @@
 function Cleaner(params) {
-  var cleaner = {};
+
+  var cleaner = {
+    svg_data: {}
+  };
 
 
-  // set up DOM and bind events to DOM
+  //
+  // set up DOM elements and bind events to DOM
   cleaner.setup = function() {
+
+    //
+    // codemirror options
+    var $cm_opts = {
+      theme: 'base16-dark',
+      mode: 'xml',
+      htmlMode: true,
+      lineNumbers: true
+    }
 
     //
     // input cleaner object
@@ -12,10 +25,10 @@ function Cleaner(params) {
       $ip.parentNode.replaceChild(elt, $ip);
     }, {
       value: $ip.value,
-      mode: 'xml',
-      htmlMode: true,
-      theme: 'base16-dark',
-      lineNumbers: true
+      mode: $cm_opts.mode,
+      htmlMode: $cm_opts.htmlMode,
+      theme: $cm_opts.theme,
+      lineNumbers: $cm_opts.lineNumbers
     });
 
     //
@@ -25,10 +38,10 @@ function Cleaner(params) {
       $op.parentNode.replaceChild(elt, $op);
     }, {
       value: $op.value,
-      mode: 'xml',
-      htmlMode: true,
-      theme: 'base16-dark',
-      lineNumbers: true
+      mode: $cm_opts.mode,
+      htmlMode: $cm_opts.htmlMode,
+      theme: $cm_opts.theme,
+      lineNumbers: $cm_opts.lineNumbers
     });
 
     //
@@ -39,18 +52,40 @@ function Cleaner(params) {
     cleaner.$trigger.addEventListener('click', cleaner.cleanHandler);
 
     //
+    // switch to json toggle
+    cleaner.$switch = document.getElementById(params.switch_id);
+
+    // bind switch method to toggle click
+    cleaner.$mode = 'svg';
+    cleaner.$switch.addEventListener('click', function() {
+      if(cleaner.$mode == 'svg') {
+        cleaner.switchFormat('json');
+      } else {
+        cleaner.switchFormat('svg');
+      }
+    });
+
+    //
     // temporarily converting on load
     cleaner.cleanHandler();
   }
 
 
   //
-  // get cleaned code and output it
+  // get cleaned code, store it, and output it
   cleaner.cleanHandler = function() {
-    var cleaned_code = cleaner.cleanSVG();
-    cleaner.$output.setValue(cleaned_code.value);
+    // set input
+    cleaner.svg_data.input = cleaner.$input.getValue();
+    // set cleaned code
+    cleaner.svg_data.output = cleaner.cleanSVG();
+    // set output value
+    cleaner.$output.setValue(cleaner.svg_data.output.value);
+    // make sure in svg mode
+    cleaner.setMode('svg');
+    // show switch if not shown
+    if(!cleaner.$switch.className.match('active')) cleaner.$switch.className += " active";
+    // format output
     cleaner.format(cleaner.$output);
-    // console.log(cleaned_code, cleaner.gradients);
   }
 
 
@@ -61,113 +96,169 @@ function Cleaner(params) {
     var res;
 
     //
-    var input_value = cleaner.$input.getValue();
-
-    //
     // turning svg into json object
-    var svgJson = new svgToJson(input_value);
-    console.log(svgJson);
+    cleaner.svg_data.svg_source = new svgToJson(cleaner.svg_data.input);
 
-    //
-    cleaner.gradients = {
-      // finding all gradients
-      found: input_value.match(cleaner.lib.__gradients),
-      // will hold clean gradients
-      clean: new Array()
-    }
+    // finding all gradients
+    cleaner.svg_data.gradients_source = cleaner.findGradients(cleaner.svg_data.svg_source);
+    // will hold clean gradients
+    cleaner.svg_data.gradients = new Array();
 
     // process found gradients
-    return cleaner.processFoundGradients(input_value);
+    return cleaner.processGradients();
 
   }
 
 
   //
+  // find gradients in svg json
+  cleaner.findGradients = function(svg_json) {
+    var gradients = new Array();
+
+    // for each tag
+    for(var i = 0; i < svg_json.length; i++) {
+      var el = svg_json[i];
+
+      // if a gradient
+      if(el._name.match(cleaner.lib.__gradient)) {
+
+        // handle types of gradient tags
+        switch(el._type) {
+
+          // open tags find all containing stops to create gradient
+          case 'open':
+            var $gradient = {
+              type: 'full',
+              position: i,
+              name: el._name,
+              attrs: el._attrs,
+              stops: new Array(),
+              stops_str: "",
+              stop_count: 0
+            };
+
+            var finding_stops = true;
+
+            while(finding_stops) {
+              i++;
+              var stop = svg_json[i];
+              if(stop._name != 'stop') {
+                finding_stops = false;
+              } else {
+                $gradient.stop_count++;
+                $gradient.stops.push(stop._attrs);
+                $gradient.stops_str += JSON.stringify(stop._attrs).replace(/[{}\"\',:]/g,'');
+              }
+            }
+            gradients.push($gradient);
+            break;
+
+
+          case 'closeself':
+            var $gradient = {
+              type: 'ref',
+              position: i,
+              stop_count: 0,
+              name: el._name,
+              attrs: el._attrs
+            };
+            gradients.push($gradient);
+            break;
+        }
+
+      }
+
+    }
+
+    return gradients;
+  }
+
+
+  //
   // //
-  cleaner.processFoundGradients = function(input_value) {
+  cleaner.processGradients = function() {
 
     // if any gradients exist
-    if(cleaner.gradients.found) {
+    if(cleaner.svg_data.gradients_source) {
 
       // for each match
-      for (var match = 0; match < cleaner.gradients.found.length;) {
+      for (var match = 0; match < cleaner.svg_data.gradients_source.length; match++) {
 
         // grab the regex library
         var _lib = cleaner.lib;
 
         // store the current gradient
-        var gradient  = cleaner.gradients.found[match++],
-            tag       = gradient.match(_lib.__gradientTag)[0],
-            type      = tag.match(_lib.__gradientType)[0],
-            id        = tag.match(_lib.__id)[0].replace(_lib.__id_val, '$1'),
-            attrs     = tag.match(_lib.__attrs),
-            stops     = gradient.match(_lib.__stops),
-            stops_str = (stops) ? '  ' + stops.join('\n ') : '';
+        var gradient = cleaner.svg_data.gradients_source[match];
 
         //
         // if we're past the first match, we need to start looking for duplicate stops and xlink them
-        if (match > 1) {
+        if (match > 0 && gradient.stops && gradient.stops.length) {
           // checking flag
           var checking = true;
+
           // see if stops match a previous stops
-          for (var s = match - 1; s > 0; s--) {
+          for (var s = match; s > 0; s--) {
+
             // if stops match previous stops
-            if (stops_str == cleaner.gradients.clean[s - 1].stops_str && checking) {
+            if (gradient.stops_str == cleaner.svg_data.gradients[s - 1].stops_str && checking) {
               checking = false;
+
               // remove stops value
-              stops_str = '';
+              gradient.stops = null;
+              gradient.stops_str = '';
+
+              // gradient type is now a ref
+              gradient.type = 'ref';
+
+              // ref id
+              var ref_id = cleaner.svg_data.gradients[s - 1].attrs.id;
+
               // add xlink attribute
-              attrs.splice(1, 0, 'xlink:href=\"#' + cleaner.gradients.clean[s - 1].id + '\"');
-            };
+              gradient.attrs['xlink:href'] = '#' + ref_id;
+
+              // sort by is ref id
+              gradient.sort_by = ref_id  + "-lvl-2";
+
+            } else {
+
+              // sort by is id
+              gradient.sort_by = gradient.attrs.id + "-lvl-1";
+
+            }
           }
+        } else {
+
+          // first match or no stops
+          if(gradient.attrs['xlink:href']) {
+            // sort by is xlink
+            gradient.sort_by = gradient.attrs['xlink:href'].replace(/#/,'') + "-lvl-2";
+            // no stops
+            gradient.stops = null;
+            gradient.stops_str = '';
+          } else {
+            // sort by is id
+            gradient.sort_by = gradient.attrs.id + "-lvl-1";
+          }
+
         }
-
-
-        //
-        // clean attributes
-        attrs = cleaner.cleanAttributes(attrs);
-
 
         //
         // add gradient to gradients
-        cleaner.gradients.clean.push({
-          type: type, id: id, attrs: attrs, stops: stops, stops_str: stops_str
-        });
+        cleaner.svg_data.gradients.push(gradient);
 
-
-        //
-        // remove gradient from original location
-        input_value = input_value.replace(gradient, '');
       }
-
-      console.log(cleaner.gradients.clean);
 
 
       //
-      // writing defs
-      var defs = '';
-      // for each gradient
-      for(var g = 0; g < cleaner.gradients.clean.length; g++) {
-        var gradient = cleaner.gradients.clean[g];
-        defs += '\n<' + gradient.type + ' ' + gradient.attrs.join(' ');
-        if (gradient.stops_str) {
-          defs += '>\n' + gradient.stops_str + '\n</' + gradient.type + '>';
-        } else {
-          defs += ' />';
-        }
-        defs += '\n';
-      }
+      // rewrite svg array
+      cleaner.svg_data.svg = cleaner.buildSVG();
 
-      // if defs already exists, we append after opening def tag
-      if(input_value.indexOf('<defs>') > -1) {
-        input_value = input_value.replace('<defs>', '<defs>\n'+defs);
-      // if defs doesn't exist, we wrap gradients with it
-      } else {
-        input_value = input_value.replace(/(<svg.*?>)/g, '$1\n<defs>\n'+defs+'</defs>\n');
-      }
+      //
+      // turn array into new svg
+      output = cleaner.writeSVG();
 
       // response is success with formatted gradients
-      return { message: 'success', value: input_value }
+      return { message: 'success', value: output }
 
     } else {
 
@@ -180,16 +271,151 @@ function Cleaner(params) {
 
   //
   // //
-  cleaner.cleanAttributes = function(attrs) {
-    var res = [];
-    for (var a = 0; a < attrs.length; a++) {
-      var attr = attrs[a];
-      attr = (attr.match(' ')) ? attr : attr.replace(/'/g, '').replace(/'/g,'');
-      res.push(attr);
+  cleaner.buildSVG = function() {
+    //
+    // loop through gradients and clean up source
+    var svg = new Array(),
+        // tmp clone of source for manipulation
+        svg_src_tmp = cleaner.svg_data.svg_source.slice(0);
+
+
+    //
+    // for each gradient, remove from svg source
+    var relative_index = 0;
+    for(var g = 0; g < cleaner.svg_data.gradients.length; g++) {
+      // grabbing the gradient
+      var gradient = cleaner.svg_data.gradients[g],
+          // how many items we are going to remove from array (stops, closing tags included)
+          remove_amount = (gradient.stop_count > 0) ? gradient.stop_count + 2 : 1;
+      // remove items from array
+      svg_src_tmp.splice(gradient.position - relative_index, remove_amount);
+      // adjust the relative index since we just removed a bunch of shit
+      relative_index += remove_amount;
     }
-    console.log(res);
-    return res;
+
+
+
+
+    //
+    // sort gradients by sort_by property
+    cleaner.svg_data.gradients.sort(function(a, b) {
+        if (a.sort_by < b.sort_by)
+          return -1;
+        if (a.sort_by > b.sort_by)
+          return 1;
+        return 0;
+    });
+
+
+    //
+    // detect defs. if exist, do nothing. else create.
+    var defs_index = null,
+        defs_inc = 0;
+
+    // look for defs index
+    while(!defs_index) {
+      // if it is a def
+      if(cleaner.svg_data.svg_source[defs_inc]._name == 'defs') defs_index = defs_inc + 1;
+      // if we havent hit the end
+      if(defs_inc < cleaner.svg_data.svg_source.length - 1) {
+        // go to next item
+        defs_inc++;
+      } else {
+        // no defs found, we need to inject a defs element
+        cleaner.svg_data.svg_source.splice(1, 0, {
+          _attrs: {}, _name: 'defs', _pos: 1, _type: 'open',
+        }, {
+          _attrs: {}, _name: 'defs', _pos: 1, _type: 'close',
+        });
+        // and set the defs index
+        defs_index = 2;
+      }
+    }
+
+    //
+    // reinject gradients into tmp src
+    for(var g = 0; g < cleaner.svg_data.gradients.length; g++) {
+      var gradient = cleaner.svg_data.gradients[g];
+
+      // inject the gradient open tag
+      inject({
+        _name: gradient.name,
+        _type: (gradient.type == 'ref') ? 'closeself' : 'open',
+        _pos: 2,
+        _attrs: gradient.attrs
+      });
+
+      // inject the gradient stops and close tag
+      if(gradient.type != 'ref') {
+        if(gradient.stops) {
+          for(var i = 0; i < gradient.stops.length; i++) {
+            var stop = gradient.stops[i];
+            // inject the closing tag
+            inject({
+              _name: 'stop',
+              _type: 'closeself',
+              _pos: 3,
+              _attrs: stop
+            });
+          }
+        }
+
+        // inject the closing tag
+        inject({
+          _name: gradient.name,
+          _type: 'close',
+          _pos: 2,
+          _attrs: gradient.attrs
+        });
+      }
+    }
+
+    function inject(obj) {
+      svg_src_tmp.splice(defs_index++, 0, obj);
+    }
+
+
+    return svg_src_tmp;
+
   }
+
+
+  //
+  // //
+  cleaner.writeSVG = function() {
+    var string = "";
+    for(var i = 0; i < cleaner.svg_data.svg.length; i++) {
+      string += writeTag(cleaner.svg_data.svg[i]);
+    }
+
+    return string;
+
+    function writeTag(obj) {
+      var str = '<';
+      switch(obj._type) {
+        case 'open':
+          str += obj._name + attrsToString(obj._attrs) + '>';
+          break;
+        case 'closeself':
+          str += obj._name + attrsToString(obj._attrs) + '/>';
+          break;
+        case 'close':
+          str += '/' + obj._name + '>';
+          break;
+      }
+      return str;
+    }
+
+    function attrsToString(attrs) {
+      var attrs_str = '';
+      for(var key in attrs) {
+        attrs_str += ' ' + key + '="' + attrs[key] + '"';
+      }
+      return attrs_str;
+    }
+
+  }
+
 
 
   //
@@ -209,23 +435,42 @@ function Cleaner(params) {
 
 
   //
+  // switch output to different value
+  cleaner.switchFormat = function(which) {
+    cleaner.setMode(which);
+    if(which == 'svg') {
+      cleaner.$output.setValue(cleaner.svg_data.output.value);
+    } else if (which == 'json') {
+      cleaner.$output.setValue(JSON.stringify(cleaner.svg_data.svg));
+    }
+    // format the text
+    cleaner.format(cleaner.$output);
+  }
+
+
+  //
+  // switch output to different value
+  cleaner.setMode = function(which) {
+    cleaner.$mode = which;
+    switch(which) {
+      case 'json':
+        cleaner.$output.setOption('mode', 'application/ld+json');
+        cleaner.$switch.innerHTML = 'Switch to SVG';
+        break;
+      case 'svg':
+        cleaner.$output.setOption('mode', 'xml');
+        cleaner.$switch.innerHTML = 'Switch to JSON';
+    }
+  }
+
+
+  //
   // regular expressions
   cleaner.lib = {
-    // selecting an entire gradient element
-    __gradients: /(<[a-zA-Z]+Gradient([^>]|[\s])+?\/>|<[a-zA-Z]+Gradient[\S\s]+?<\/[a-zA-Z]+Gradient>)/g,
-    // grabbing a gradient name
-    __gradientTag: /<[a-zA-Z]+Gradient[\S\s]+?>/,
-    // getting the type of gradient
-    __gradientType: /[a-z]+Gradient/,
-    // parsing an id out of a tag
-    __id: /id=["']?([^ "']*)["' ]/,
-    // get id value out of an id
-    __id_val: /id=["']?([^ "']*)["' ]/,
-    // getting each attribute
-    __attrs: /[a-zA-Z0-9-:_]+=["']?(([^"']+["'\/])|([^"' \/>]+))/g,
-    // getting an entire gradient stop
-    __stops: /<stop.*(\/>|<\/stop>)/g
+    // if element name is a gradient
+    __gradient: /Gradient/
   }
+
 
 
   //

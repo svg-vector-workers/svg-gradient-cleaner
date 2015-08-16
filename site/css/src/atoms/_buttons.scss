@@ -1,11 +1,27 @@
+@mixin button-color($color) {
+  box-shadow: 0px ui(border) 0px 0px color($color, dark, 20%);
+  text-shadow: 1px 1px 0px color($color, dark, 10%);
+
+  background: color($color);
+
+  &:hover,
+  &:focus {
+    background: color($color,dark,10%);
+  }
+
+  &:active {
+    box-shadow: 0px 0px 0px 0px color($color,dark,20%);
+  }
+}
+
 button {
   border: none;
   border-radius: ui(corner);
-  box-shadow: 0px ui(border) 0px 0px color(accent, dark, 20%);
+
+  @include button-color(accent);
 
   outline: none;
-  padding-left: 2em;
-  padding-right: 2em;
+  padding: 1em 2em;
 
   transition: box-shadow ui(time) ui(ease),
     transform ui(time) ui(ease),
@@ -14,18 +30,14 @@ button {
   font-size: 14px;
   font-weight: 300;
   line-height: 1;
-  text-shadow: 1px 1px 0px color(accent,dark,10%);
 
-  background: color(accent);
   color: white;
 
-  &:hover,
-  &:focus {
-    background: color(accent,dark,10%)
+  &:active {
+    transform: translateY(ui(border));
   }
 
-  &:active {
-    box-shadow: 0px 0px 0px 0px color(accent,dark,20%);
-    transform: translateY(ui(border));
+  &.alt {
+    @include button-color(alt);
   }
 }
