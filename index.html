@@ -1,4 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="600" viewBox="0 0 800 600">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>SVG Clean | Gradients</title>
+    <meta name="description" content="">
+
+    <meta name="robots" content="all">
+
+    <meta name="author" content="Jake Albaugh">
+    <meta name="Copyright" content="Jake Albaugh ©2015. All Rights Reserved.">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic|Inconsolata:400" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style.min-f4b9aaa709.css"/>
+  </head>
+  <body>
+    <header role="banner">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="svgc-logo"
+          width="300" height="52" viewBox="-150 -26 300 52">
+          <defs>
+            <linearGradient id="gradient" gradientUnits="userSpaceOnUse" x1="-150" y1="-13" x2="-150" y2="13">
+              <stop offset="0" stop-color="#ECC16E" stop-opacity="1"/>
+              <stop offset="0.7" stop-color="#ECC16E" stop-opacity="0.8"/>
+              <stop offset="0.9" stop-color="#ECC16E" stop-opacity="0.7"/>
+            </linearGradient>
+        
+            <text id="txt" x="0" y="4" font-family="Open Sans" font-size="26" text-anchor="middle" alignment-baseline="middle">
+              SVG CLEAN GRADIENTS
+            </text>
+          </defs>
+        
+          <use xlink:href="#txt" fill="url(#gradient)"/>
+        </svg>  </div>
+      <div>
+        <button id="switch" class="alt">Switch to JSON</button>
+        <button id="trigger">Organize Gradients</button>
+      </div>
+    </header>
+    <main role="main">
+      <div class="svgc-app">
+  <section class="code-windows">
+    <textarea id="input" placeholder="Input"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="600" viewBox="0 0 800 600">
   <defs></defs>
   <g>
     <linearGradient id="e" gradientUnits="userSpaceOnUse" x1="105.933" y1="168.139" x2="105.933" y2="364.116">
@@ -60,4 +111,13 @@
     </linearGradient>
     <path fill="url(#g)" d="M734.6 128l-6.5 242.4s14.3 7.1 28.1-.9L751.1 128h-16.5z"/>
   </g>
-</svg>
+</svg></textarea>
+    <textarea id="output" placeholder="Output"></textarea>
+  </section>
+</div>
+    </main>
+
+    <footer role="contentinfo"></footer>
+    <script src="js/src/scripts.min-dddce78015.js"></script>
+  </body>
+</html>
