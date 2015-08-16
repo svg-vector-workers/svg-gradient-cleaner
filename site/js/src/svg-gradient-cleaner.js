@@ -97,7 +97,7 @@ function Cleaner(params) {
 
     //
     // turning svg into json object
-    cleaner.svg_data.svg_source = new svgToJson(cleaner.svg_data.input);
+    cleaner.svg_data.svg_source = new SVGToJSON(cleaner.svg_data.input).json;
 
     // finding all gradients
     cleaner.svg_data.gradients_source = cleaner.findGradients(cleaner.svg_data.svg_source);
@@ -120,18 +120,18 @@ function Cleaner(params) {
       var el = svg_json[i];
 
       // if a gradient
-      if(el._name.match(cleaner.lib.__gradient)) {
+      if(el.name.match(cleaner.lib.__gradient)) {
 
         // handle types of gradient tags
-        switch(el._type) {
+        switch(el.type) {
 
           // open tags find all containing stops to create gradient
           case 'open':
             var $gradient = {
               type: 'full',
               position: i,
-              name: el._name,
-              attrs: el._attrs,
+              name: el.name,
+              attrs: el.attrs,
               stops: new Array(),
               stops_str: "",
               stop_count: 0
@@ -142,12 +142,12 @@ function Cleaner(params) {
             while(finding_stops) {
               i++;
               var stop = svg_json[i];
-              if(stop._name != 'stop') {
+              if(stop.name != 'stop') {
                 finding_stops = false;
               } else {
                 $gradient.stop_count++;
-                $gradient.stops.push(stop._attrs);
-                $gradient.stops_str += JSON.stringify(stop._attrs).replace(/[{}\"\',:]/g,'');
+                $gradient.stops.push(stop.attrs);
+                $gradient.stops_str += JSON.stringify(stop.attrs).replace(/[{}\"\',:]/g,'');
               }
             }
             gradients.push($gradient);
@@ -159,8 +159,8 @@ function Cleaner(params) {
               type: 'ref',
               position: i,
               stop_count: 0,
-              name: el._name,
-              attrs: el._attrs
+              name: el.name,
+              attrs: el.attrs
             };
             gradients.push($gradient);
             break;
@@ -315,7 +315,7 @@ function Cleaner(params) {
     // look for defs index
     while(!defs_index) {
       // if it is a def
-      if(cleaner.svg_data.svg_source[defs_inc]._name == 'defs') defs_index = defs_inc + 1;
+      if(cleaner.svg_data.svg_source[defs_inc].name == 'defs') defs_index = defs_inc + 1;
       // if we havent hit the end
       if(defs_inc < cleaner.svg_data.svg_source.length - 1) {
         // go to next item
@@ -323,9 +323,9 @@ function Cleaner(params) {
       } else {
         // no defs found, we need to inject a defs element
         cleaner.svg_data.svg_source.splice(1, 0, {
-          _attrs: {}, _name: 'defs', _pos: 1, _type: 'open',
+          attrs: {}, name: 'defs', pos: 1, type: 'open',
         }, {
-          _attrs: {}, _name: 'defs', _pos: 1, _type: 'close',
+          attrs: {}, name: 'defs', pos: 1, type: 'close',
         });
         // and set the defs index
         defs_index = 2;
@@ -339,10 +339,10 @@ function Cleaner(params) {
 
       // inject the gradient open tag
       inject({
-        _name: gradient.name,
-        _type: (gradient.type == 'ref') ? 'closeself' : 'open',
-        _pos: 2,
-        _attrs: gradient.attrs
+        name: gradient.name,
+        type: (gradient.type == 'ref') ? 'closeself' : 'open',
+        pos: 2,
+        attrs: gradient.attrs
       });
 
       // inject the gradient stops and close tag
@@ -352,20 +352,20 @@ function Cleaner(params) {
             var stop = gradient.stops[i];
             // inject the closing tag
             inject({
-              _name: 'stop',
-              _type: 'closeself',
-              _pos: 3,
-              _attrs: stop
+              name: 'stop',
+              type: 'closeself',
+              pos: 3,
+              attrs: stop
             });
           }
         }
 
         // inject the closing tag
         inject({
-          _name: gradient.name,
-          _type: 'close',
-          _pos: 2,
-          _attrs: gradient.attrs
+          name: gradient.name,
+          type: 'close',
+          pos: 2,
+          attrs: gradient.attrs
         });
       }
     }
@@ -392,15 +392,15 @@ function Cleaner(params) {
 
     function writeTag(obj) {
       var str = '<';
-      switch(obj._type) {
+      switch(obj.type) {
         case 'open':
-          str += obj._name + attrsToString(obj._attrs) + '>';
+          str += obj.name + attrsToString(obj.attrs) + '>';
           break;
         case 'closeself':
-          str += obj._name + attrsToString(obj._attrs) + '/>';
+          str += obj.name + attrsToString(obj.attrs) + '/>';
           break;
         case 'close':
-          str += '/' + obj._name + '>';
+          str += '/' + obj.name + '>';
           break;
       }
       return str;

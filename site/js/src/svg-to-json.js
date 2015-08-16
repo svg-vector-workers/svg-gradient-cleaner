@@ -1,7 +1,7 @@
 //
-// take string of svg and return object
+// take string of svg and return json
 
-function svgToJson($svg) {
+function SVGToJSON($svg, opts) {
 
   //
   // //
@@ -11,7 +11,8 @@ function svgToJson($svg) {
 
   //
   // convert svg tags to objects
-  $svg_json.tag_data = getTagObjects();
+  $svg_json.json = getTagObjects();
+  if(opts && opts.stats) $svg_json.stats = getTagStats();
 
 
   //
@@ -19,7 +20,7 @@ function svgToJson($svg) {
   // an array for now.
   // maybe build out as an object model later.
   // not necessary.
-  return $svg_json.tag_data;
+  return $svg_json;
 
 
   //
@@ -32,10 +33,10 @@ function svgToJson($svg) {
     for(var t = 0; t < tags.length; t++) {
       var tag = tags[t],
           obj = {
-            _name: getTagName(tag),
-            _type: getTagType(tag),
-            _pos: undefined,
-            _attrs: getTagAttributes(tag)
+            name: getTagName(tag),
+            type: getTagType(tag),
+            pos: undefined,
+            attrs: getTagAttributes(tag)
           };
       arr.push(obj);
     }
@@ -46,11 +47,11 @@ function svgToJson($svg) {
     for(var o = 0; o < arr.length; o++) {
       var object = arr[o];
       // decrease if closing tag
-      if(object._type === 'close') position--;
+      if(object.type === 'close') position--;
       // position determined by previous
-      object._pos = position;
+      object.pos = position;
       // increase if open tag
-      if(object._type === 'open') position++;
+      if(object.type === 'open') position++;
     }
 
     //
@@ -77,18 +78,18 @@ function svgToJson($svg) {
   //
   // get a tag's name
   function getTagName(tag) {
-    return tag.match(_lib.__tag_name)[0];
+    return tag.match(_lib.__tagname)[0];
   }
 
 
   //
   // get a tag's attributes
   function getTagAttributes(tag) {
-    var raw_attrs = tag.match(_lib.__tag_attrs) || new Array(),
+    var rawattrs = tag.match(_lib.__tagattrs) || new Array(),
         attrs = new Object();
     // for each attribute in tag
-    for(var a = 0; a < raw_attrs.length; a++) {
-      var attr = raw_attrs[a],
+    for(var a = 0; a < rawattrs.length; a++) {
+      var attr = rawattrs[a],
           key = attr.match(_lib.__attr_key)[0],
           key_exp = new RegExp(key,''),
           val = attr.replace(key_exp, '').replace(/[="']/g, ''),
@@ -96,6 +97,31 @@ function svgToJson($svg) {
       attrs[key] = val;
     }
     return attrs;
+  }
+
+
+  //
+  // get stats for generated JSON
+  function getTagStats() {
+    var stats = {
+      elements: new Object(),
+      attributes: new Object()
+    };
+    for(var i = 0; i < $svg_json.json.length; i++) {
+      var obj = $svg_json.json[i];
+      if(obj.type != 'close') {
+        // count tag name
+        if(stats.elements[obj.name]) { stats.elements[obj.name]++; }
+        else { stats.elements[obj.name] = 1; }
+
+        // count attributes
+        for(var k in obj.attrs) {
+          if(stats.attributes[k]) { stats.attributes[k]++; }
+          else { stats.attributes[k] = 1; }
+        }
+      }
+    }
+    return stats;
   }
 
 
@@ -112,18 +138,13 @@ function svgToJson($svg) {
       // self closing tag
       __self_closing: /<[^\/<]+?\/>/,
       // tag name
-      __tag_name: /[^< \/>]+/,
+      __tagname: /[^< \/>]+/,
       // getting each attribute
-      __tag_attrs: /[a-zA-Z0-9-:_]+=["']?(([^"']+["'\/])|([^"' \/>]+))/g,
+      __tagattrs: /[a-zA-Z0-9-:_]+=["']?(([^"']+["'\/])|([^"' \/>]+))/g,
       // getting each attribute key
       __attr_key: /[^ =]+/
       // getting each attribute value by replacing key
     }
   }
-
-
-  //
-  // return our object
-  return $svg_json;
 
 }
