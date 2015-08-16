@@ -252,9 +252,10 @@ gulp.task('copy', ['usemin'], function() {
 gulp.task('deploy', function() {
   return gulp.src([path.dist + '/**/*'])
              .pipe($.ghPages(
-                $.if(env_flag === false,
-                { branch: 'staging' },
-                { branch: 'gh-pages'})
+                $.if(env_flag !== false,
+                {
+                  branch: 'gh-pages'
+                })
              ));
 });
 
