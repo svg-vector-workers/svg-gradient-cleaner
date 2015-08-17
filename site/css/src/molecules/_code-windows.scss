@@ -1,0 +1,11 @@
+.code-windows {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+
+  > .CodeMirror {
+    font-family: Inconsolata;
+    flex: 2;
+    margin: 0;
+  }
+}

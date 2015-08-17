@@ -1,23 +1,27 @@
-button {
-  border: none;
-  border-radius: ui(corner);
-  outline: none;
-  padding: 1em 2em;
-  transition:
-    box-shadow ui(time,short) ui(ease),
-    transform  ui(time,short) ui(ease),
-    background ui(time,short) ui(ease);
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1;
-  @include button-color(accent);
-  color: white;
-
-  &:active {
-    transform: translateY(ui(border));
+button, .label-button {
+  @include button-traits();
+  &.block {
+    @include button-block();
   }
+}
+
+button {
+  // resets
+  border: none; outline: none;
+
+  @include button-color(accent);
+  @include button-scale(1,1,2);
 
   &.alt {
     @include button-color(alt);
   }
+}
+
+.label-button {
+  // resets
+  cursor: pointer;
+  user-select: none;
+
+  @include button-color(alt);
+  @include button-scale(1,0.5,0.5);
 }

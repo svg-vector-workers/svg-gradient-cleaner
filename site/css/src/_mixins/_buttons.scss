@@ -1,7 +1,9 @@
 @mixin button-color($color) {
+
   box-shadow: 0px ui(border) 0px 0px color($color, dark, 20%);
   text-shadow: 1px 1px 0px color($color, dark, 10%);
 
+  color: white;
   background: color($color);
 
   &:hover,
@@ -12,4 +14,29 @@
   &:active {
     box-shadow: 0px 0px 0px 0px color($color,dark,20%);
   }
+}
+
+@mixin button-traits() {
+  border-radius: ui(corner);
+  display: inline-block;
+
+  transition:
+    box-shadow ui(time,short) ui(ease),
+    transform  ui(time,short) ui(ease),
+    background ui(time,short) ui(ease);
+  font-weight: 300;
+  line-height: 1;
+  &:active {
+    transform: translateY(ui(border));
+  }
+}
+
+@mixin button-scale($f:1,$y:1,$x:1) {
+  font-size: $f * 14px;
+  padding: $y * 1em $x * 1em;
+}
+
+@mixin button-block() {
+  display: block;
+  width: 100%;
 }

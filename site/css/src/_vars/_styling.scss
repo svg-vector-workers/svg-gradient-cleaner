@@ -3,6 +3,7 @@
 $colors: (
   bg: #000000,
   bg-lt: #151515,
+  white: #FFF,
   white-trans: rgba(255,255,255,0.1),
   // accent: #f4bf75, // tan
   accent: #90a959, // green
@@ -30,7 +31,7 @@ $colors: (
 $ui: (
   corner: 2px,
   border: 2px,
-  time: (short: 50ms),
+  time: (short: 50ms, mid: 200ms),
   ease: ease-out
 );
 

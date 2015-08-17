@@ -1,0 +1,65 @@
+#output-options-menu {
+  position: absolute;
+  bottom: 0; right: 0;
+  padding: 1rem;
+  z-index: 9;
+
+  //
+  // state
+  transition:
+    opacity ui(time,mid) ui(ease),
+    transform ui(time,mid) ui(ease);
+  visibility: hidden;
+  transform: translateX(100%);
+  opacity: 0;
+
+  &.active {
+    visibility: visible;
+    opacity: 0.7;
+    transform: translateX(0);
+    &:hover { opacity: 1; }
+  }
+
+
+  label {
+    position: relative;
+    z-index: 2;
+  }
+
+  ul {
+    // reset
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    position: absolute;
+    bottom: 0;
+    right: -200px;
+    z-index: 1;
+
+    width: 200px;
+    padding: 1rem 1rem 4rem;
+    box-sizing: border-box;
+
+    color: color(white);
+    background: color(bg);
+    opacity: 0;
+
+    border-left: ui(border) solid color(white-trans);
+    border-top: ui(border) solid color(white-trans);
+
+    transition:
+      right ui(time,mid) ui(ease),
+      opacity ui(time,mid) ui(ease);
+  }
+}
+
+#output-options-menu-toggle:checked ~ ul {
+  right: 0;
+  opacity: 1;
+}

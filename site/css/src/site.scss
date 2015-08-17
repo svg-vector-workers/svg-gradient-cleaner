@@ -68,21 +68,14 @@ body {
 @import "atoms/typography";
 @import "atoms/logo";
 @import "atoms/buttons";
+@import "atoms/output-options-menu";
+@import "atoms/toggle-checkbox";
 
 
 // Molecules
 // ===============================================
 
-.code-windows {
-  display: flex;
-  flex-wrap: wrap;
-
-  > .CodeMirror {
-    font-family: Inconsolata;
-    flex: 2;
-    margin: 0;
-  }
-}
+@import "molecules/code-windows";
 
 
 // Organisms

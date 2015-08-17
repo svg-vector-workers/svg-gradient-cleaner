@@ -78,14 +78,18 @@ function Cleaner(params) {
   cleaner.cleanHandler = function() {
     // set input
     cleaner.svg_data.input = cleaner.$input.getValue();
+    // show active items if no output yet
+    if(!cleaner.svg_data.output) {
+      for(var i = 0; i < params.output_active_ids.length; i++) {
+        document.getElementById(params.output_active_ids[i]).className += " active";
+      }
+    }
     // set cleaned code
     cleaner.svg_data.output = cleaner.cleanSVG();
     // set output value
     cleaner.$output.setValue(cleaner.svg_data.output.value);
     // make sure in svg mode
     cleaner.setMode('svg');
-    // show switch if not shown
-    if(!cleaner.$switch.className.match('active')) cleaner.$switch.className += " active";
     // format output
     cleaner.format(cleaner.$output);
   }
