@@ -30,12 +30,17 @@ $colors: (
 $ui: (
   corner: 2px,
   border: 2px,
-  time: 50ms,
+  time: (short: 50ms),
   ease: ease-out
 );
 
-@function ui($which) {
-  @return map-get($ui,$which);
+@function ui($which,$variant:null) {
+  $item: map-get($ui,$which);
+  @if $variant == null {
+    @return $item;
+  } @else {
+    @return map-get($item,$variant);
+  }
 }
 
 
