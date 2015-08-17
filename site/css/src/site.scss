@@ -1,14 +1,14 @@
 // Config
 // ===============================================
 
-@import "vars/styling";
+@import "_vars/styling";
 
 
 // Mixins
 // ===============================================
 
-@import "mixins/media-query";
-@import "mixins/buttons";
+@import "_mixins/media-query";
+@import "_mixins/buttons";
 
 
 // Bower Plugins
@@ -20,7 +20,7 @@
 // Globals
 // ===============================================
 
-@import "globals/bases";
+@import "_globals/bases";
 
 
 // App Globals
