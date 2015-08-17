@@ -15,7 +15,8 @@ function Cleaner(params) {
       theme: 'base16-dark',
       mode: 'xml',
       htmlMode: true,
-      lineNumbers: true
+      lineNumbers: true,
+      output_readOnly: true
     }
 
     //
@@ -41,7 +42,8 @@ function Cleaner(params) {
       mode: $cm_opts.mode,
       htmlMode: $cm_opts.htmlMode,
       theme: $cm_opts.theme,
-      lineNumbers: $cm_opts.lineNumbers
+      lineNumbers: $cm_opts.lineNumbers,
+      readOnly: $cm_opts.output_readOnly
     });
 
     //
@@ -67,7 +69,7 @@ function Cleaner(params) {
 
     //
     // temporarily converting on load
-    cleaner.cleanHandler();
+    // cleaner.cleanHandler();
   }
 
 
