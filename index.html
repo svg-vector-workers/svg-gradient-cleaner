@@ -20,7 +20,7 @@
 
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic|Inconsolata:400" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/style.min-f4b9aaa709.css"/>
+    <link rel="stylesheet" href="/css/style.min-a83813dd2c.css"/>
   </head>
   <body>
     <header role="banner">
@@ -42,8 +42,7 @@
           <use xlink:href="#txt" fill="url(#gradient)"/>
         </svg>  </div>
       <div>
-        <button id="switch" class="alt">Switch to JSON</button>
-        <button id="trigger">Organize Gradients</button>
+        <button id="trigger">Convert</button>
       </div>
     </header>
     <main role="main">
@@ -112,12 +111,22 @@
     <path fill="url(#g)" d="M734.6 128l-6.5 242.4s14.3 7.1 28.1-.9L751.1 128h-16.5z"/>
   </g>
 </svg></textarea>
-    <textarea id="output" placeholder="Output"></textarea>
-  </section>
+    <textarea id="output" placeholder="Output"><!--
+
+  output will be here
+
+--> </textarea>
+  <nav id="output-options-menu">
+    <input id="output-options-menu-toggle" type="checkbox" class="toggle-checkbox" />
+    <label for="output-options-menu-toggle" class="label-button">Options</label>
+    <ul>
+      <li><button id="switch" class="block">Switch to JSON</button></li>
+    </ul>
+  </nav>  </section>
 </div>
     </main>
 
     <footer role="contentinfo"></footer>
-    <script src="js/src/scripts.min-74db5a63a8.js"></script>
+    <script src="js/src/scripts.min-54c15ff777.js"></script>
   </body>
 </html>
