@@ -47,6 +47,10 @@ function Cleaner(params) {
     });
 
     //
+    // show app
+    document.getElementById(params.app_id).className = document.getElementById(params.app_id).className.replace('loading','');
+
+    //
     // triggering
     cleaner.$trigger = document.getElementById(params.trigger_id);
 

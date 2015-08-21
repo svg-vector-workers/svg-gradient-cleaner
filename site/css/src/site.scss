@@ -103,5 +103,11 @@ header {
 
 // Templates
 // ===============================================
+
+.svgc-app {
+  opacity: 1;
+  transition: opacity ui(time,mid) ui(ease);
+  &.loading { opacity: 0; }
+}
 // Utilities
 // ===============================================

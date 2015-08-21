@@ -1,4 +1,5 @@
 var c = new Cleaner({
+  'app_id': 'app',
   'input_id': 'input',
   'output_id': 'output',
   'switch_id': 'switch',
