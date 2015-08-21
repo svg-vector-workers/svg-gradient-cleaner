@@ -1,0 +1,81 @@
+#info {
+  // content wrapper full window size
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity ui(time,mid) ui(ease);
+
+  // :target selects when href click is "#target-content"
+  z-index: 0;
+  &:target {
+    z-index: 99;
+    // reenable clicking
+    pointer-events: all;
+    // show that ish
+    opacity: 1;
+  }
+
+  // the white centered content
+  .info-inner {
+    position: absolute;
+    display: block;
+    padding: 48px;
+    line-height: 1.8;
+    width: 70%;
+    max-width: 600px;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    box-shadow: 0px ui(border)*2 0px 0px color(white-semi-trans);
+    border-radius: ui(corner);
+    background: color(white);
+    color: color(bg);
+    h2 {
+      margin-top: 0;
+    }
+    code {
+      font-weight: bold;
+    }
+  }
+  // the giant invisible close area (making a new target "#")
+  a.close {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: color(bg);
+    opacity: 0.7;
+    transition: opacity 200ms;
+    &:hover {
+      opacity: 0.4;
+    }
+  }
+
+  p, ul {
+    text-align: center;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      position: relative;
+      ~ li {
+        padding-left: 2rem;
+        &::before {
+          content: '\2022';
+          position: absolute;
+          left: 1rem;
+          transform: translateX(-50%);
+        }
+      }
+    }
+  }
+}

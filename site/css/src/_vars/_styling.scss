@@ -2,9 +2,11 @@
 // //
 $colors: (
   bg: #000000,
+  bg-trans: rgba(#000,0.6),
   bg-lt: #151515,
   white: #FFF,
   white-trans: rgba(255,255,255,0.1),
+  white-semi-trans: rgba(255,255,255,0.6),
   // accent: #f4bf75, // tan
   accent: #90a959, // green
   alt: #ac4142 // maroon
