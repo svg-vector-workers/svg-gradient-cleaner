@@ -20,7 +20,7 @@
 
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,300italic|Inconsolata:400" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/style.min-a83813dd2c.css"/>
+    <link rel="stylesheet" href="/css/style.min-3addc581bb.css"/>
   </head>
   <body>
     <header role="banner">
@@ -35,18 +35,29 @@
             </linearGradient>
         
             <text id="txt" x="0" y="4" font-family="Open Sans" font-size="26" text-anchor="middle" alignment-baseline="middle">
-              SVG CLEAN GRADIENTS
+              SVG CLEAN: GRADIENTS
             </text>
           </defs>
         
           <use xlink:href="#txt" fill="url(#gradient)"/>
         </svg>  </div>
       <div>
-        <button id="trigger">Convert</button>
+        <a class="info-link" href="#info">Info</a>
+        <aside id="info">
+          <a href="#" class="close"></a>
+          <div class="info-inner">
+            <p>This is a thing that will eventually be a part of a better thing.</p>
+            <ul>
+              <li><a href="http://jakealbaugh.com" target="_blank">Jake Albaugh</a></li>
+              <li><a href="http://droidpinkman.io" target="_blank">Dennis Gaebel</a></li>
+              <li><a href="https://github.com/svg-vector-workers" target="_blank">SVG VectorWorkers</a></li>
+            </ul>
+          </div>
+        </aside>    <button id="trigger">Convert</button>
       </div>
     </header>
     <main role="main">
-      <div class="svgc-app">
+      <div id="app" class="svgc-app loading">
   <section class="code-windows">
     <textarea id="input" placeholder="Input"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="600" viewBox="0 0 800 600">
   <defs></defs>
@@ -115,7 +126,7 @@
 
   output will be here
 
---> </textarea>
+--></textarea>
   <nav id="output-options-menu">
     <input id="output-options-menu-toggle" type="checkbox" class="toggle-checkbox" />
     <label for="output-options-menu-toggle" class="label-button">Options</label>
@@ -127,6 +138,6 @@
     </main>
 
     <footer role="contentinfo"></footer>
-    <script src="js/src/scripts.min-54c15ff777.js"></script>
+    <script src="js/src/scripts.min-b6f043cd58.js"></script>
   </body>
 </html>
