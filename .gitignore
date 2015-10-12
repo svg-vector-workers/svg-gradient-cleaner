@@ -2,7 +2,7 @@
 .sass-cache
 # dotfiles
 *.log
-.publish/
+#.publish/
 .DS_Store
 #dirs
 node_modules/
